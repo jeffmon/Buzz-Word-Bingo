@@ -7,7 +7,7 @@ var collection = [];
 var score = 0;
 
 app.use(express.static("./public/"));
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.json());
 
 function getWords() {
   var wordsOnly = [];
@@ -64,6 +64,16 @@ app.get("/buzzwords", (req, res) => {
   });
 });
 
+app.post("/reset", (req, res) => {
+  if (req.body.reset === true) {
+    collection = [];
+    score = 0;
+    res.json({
+      "success": true
+    });
+  }
+});
+
 app.route("/buzzword")
   .post((req, res) => {
     var isWordThere = collection.some(function(obj) {
@@ -90,7 +100,7 @@ app.route("/buzzword")
         "success": true,
         "newScore": score
       });
-    } else{
+    } else {
       res.json({
         "success": false
       });
