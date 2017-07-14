@@ -7,23 +7,41 @@ var collection = [];
 
 app.use(express.static("./public/"))
 app.use(bodyParser.urlencoded());
-//app.use(bodyParser.json());
+
+function receiveWord(obj) {
+  var number = Number(obj["points"]);
+  obj["points"] = number;
+  collection.push(obj);
+  res.json({
+    "success": true
+  });
+}
 
 app.get("/", (req, res) => {
   res.send("./index.html");
 })
 
 app.get("/buzzwords", (req, res) => {
-
+  res.json(collection);
 })
 
 app.route("/buzzword")
   .post((req, res) => {
-    collection.push(req.body)
-    console.log(collection)
-    res.send({
-      "success": true
-    });
+    if (collection.some(function(obj) {
+        return obj["buzzWord"].toLowerCase() === req.body["buzzWord"].toLowerCase()
+      })) {
+      res.json({
+        "success": false
+      });
+    } else {
+      var number = Number(req.body["points"]);
+      req.body["points"] = number;
+      collection.push(req.body);
+      console.log(collection);
+      res.json({
+        "success": true
+      });
+    }
   })
   .put((req, res) => {
 
