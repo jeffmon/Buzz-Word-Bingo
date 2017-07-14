@@ -69,7 +69,7 @@ app.route("/buzzword")
     var isWordThere = collection.some(function(obj) {
       return obj["buzzWord"].toLowerCase() === req.body["buzzWord"].toLowerCase()
     })
-    if (isWordThere) {
+    if (isWordThere || collection.length === 5) {
       res.json({
         "success": false
       });
