@@ -47,8 +47,6 @@ function putAgain(obj) {
   }
 }
 
-var test = [];
-
 function deleteWord(obj) {
   var location = collection.findIndex(function(o) {
     return o.buzzWord === obj.buzzWord;
