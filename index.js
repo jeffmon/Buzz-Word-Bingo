@@ -4,6 +4,7 @@ const router = express.Router();
 const fs = require("fs");
 const bodyParser = require("body-parser");
 var collection = [];
+var score = 0;
 
 app.use(express.static("./public/"))
 app.use(bodyParser.urlencoded());
@@ -22,7 +23,9 @@ app.get("/", (req, res) => {
 })
 
 app.get("/buzzwords", (req, res) => {
-  res.json(collection);
+  res.json({
+    "buzzWords": collection
+  });
 })
 
 app.route("/buzzword")
@@ -44,11 +47,29 @@ app.route("/buzzword")
     }
   })
   .put((req, res) => {
-
+    var isWordThere = collection.some(function(obj) {
+      return obj["buzzWord"].toLowerCase() === req.body["buzzWord"].toLowerCase()
+    });
+    if (isWordThere) {
+      for (var i = 0; i < collection.length; i++) {
+        if (collection[i]["buzzWord"].toLowerCase() === req.body["buzzWord"].toLowerCase()) {
+          collection[i]["heard"] = true;
+          score += collection[i]["points"];
+        }
+      }
+    }
+    res.json({
+      "success": true,
+      "newScore": score
+    })
   })
   .delete((req, res) => {
 
   })
+
+
+
+
 
 const server = app.listen(8080, function() {
   var host = server.address().address;
