@@ -33,13 +33,21 @@ function deleteWord(obj){
   console.log(collection);
 }
 
+function getWords(){
+  var wordsOnly = [];
+  for(var i = 0; i < collection.length; i++){
+    wordsOnly.push(collection[i]["buzzWord"]);
+  }
+  return wordsOnly;
+}
+
 app.get("/", (req, res) => {
   res.send("./index.html");
 })
 
 app.get("/buzzwords", (req, res) => {
   res.json({
-    "buzzWords": collection
+    "buzzWords": getWords()
   });
 })
 
