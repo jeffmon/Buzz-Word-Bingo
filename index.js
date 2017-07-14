@@ -67,8 +67,9 @@ app.route("/buzzword")
     var isWordThere = collection.some(function(obj) {
       return obj["buzzWord"].toLowerCase() === req.body["buzzWord"].toLowerCase()
     });
-    if(isWordThere){
-      var location = collection.findIndex(function(obj){return obj["buzzWord"] === req.body["buzzWord"];
+    if (isWordThere) {
+      var location = collection.findIndex(function(obj) {
+        return obj["buzzWord"] === req.body["buzzWord"];
       })
       collection.splice(location, 1);
       console.log(collection);
@@ -77,10 +78,6 @@ app.route("/buzzword")
       })
     }
   })
-
-
-
-
 
 const server = app.listen(8080, function() {
   var host = server.address().address;
