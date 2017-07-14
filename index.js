@@ -13,9 +13,24 @@ function receiveWord(obj) {
   var number = Number(obj["points"]);
   obj["points"] = number;
   collection.push(obj);
-  res.json({
-    "success": true
-  });
+  console.log(collection);
+}
+
+function putWord(obj) {
+  for (var i = 0; i < collection.length; i++) {
+    if (collection[i]["buzzWord"].toLowerCase() === obj["buzzWord"].toLowerCase()) {
+      collection[i]["heard"] = true;
+      score += collection[i]["points"];
+    }
+  }
+}
+
+function deleteWord(obj){
+  var location = collection.findIndex(function(o) {
+    return o["buzzWord"] === obj["buzzWord"];
+  })
+  collection.splice(location, 1);
+  console.log(collection);
 }
 
 app.get("/", (req, res) => {
@@ -30,17 +45,15 @@ app.get("/buzzwords", (req, res) => {
 
 app.route("/buzzword")
   .post((req, res) => {
-    if (collection.some(function(obj) {
-        return obj["buzzWord"].toLowerCase() === req.body["buzzWord"].toLowerCase()
-      })) {
+    var isWordThere = collection.some(function(obj) {
+      return obj["buzzWord"].toLowerCase() === req.body["buzzWord"].toLowerCase()
+    })
+    if (isWordThere) {
       res.json({
         "success": false
       });
     } else {
-      var number = Number(req.body["points"]);
-      req.body["points"] = number;
-      collection.push(req.body);
-      console.log(collection);
+      receiveWord(req.body);
       res.json({
         "success": true
       });
@@ -51,12 +64,7 @@ app.route("/buzzword")
       return obj["buzzWord"].toLowerCase() === req.body["buzzWord"].toLowerCase()
     });
     if (isWordThere) {
-      for (var i = 0; i < collection.length; i++) {
-        if (collection[i]["buzzWord"].toLowerCase() === req.body["buzzWord"].toLowerCase()) {
-          collection[i]["heard"] = true;
-          score += collection[i]["points"];
-        }
-      }
+      putWord(req.body);
     }
     res.json({
       "success": true,
@@ -68,13 +76,13 @@ app.route("/buzzword")
       return obj["buzzWord"].toLowerCase() === req.body["buzzWord"].toLowerCase()
     });
     if (isWordThere) {
-      var location = collection.findIndex(function(obj) {
-        return obj["buzzWord"] === req.body["buzzWord"];
-      })
-      collection.splice(location, 1);
-      console.log(collection);
+      deleteWord(req.body);
       res.json({
         "success": true
+      })
+    } else{
+      res.json({
+        "success": false
       })
     }
   })
