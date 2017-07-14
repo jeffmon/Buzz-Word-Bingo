@@ -12,6 +12,7 @@ app.use(bodyParser.urlencoded());
 function receiveWord(obj) {
   var number = Number(obj["points"]);
   obj["points"] = number;
+  obj["heard"] = false;
   collection.push(obj);
   console.log(collection);
 }
@@ -44,7 +45,7 @@ function getWords() {
 function putAgain(obj) {
   for (var i = 0; i < collection.length; i++) {
     if (collection[i]["buzzWord"].toLowerCase() === obj["buzzWord"].toLowerCase()) {
-      if (collection[i].hasOwnProperty("heard")) {
+      if (collection[i]["heard"] === true) {
         return false;
       } else {
         return true;
