@@ -9,6 +9,14 @@ var score = 0;
 app.use(express.static("./public/"))
 app.use(bodyParser.urlencoded());
 
+function getWords() {
+  var wordsOnly = [];
+  for (var i = 0; i < collection.length; i++) {
+    wordsOnly.push(collection[i]["buzzWord"]);
+  }
+  return wordsOnly;
+}
+
 function receiveWord(obj) {
   var number = Number(obj["points"]);
   obj["points"] = number;
@@ -26,22 +34,6 @@ function putWord(obj) {
   }
 }
 
-function deleteWord(obj) {
-  var location = collection.findIndex(function(o) {
-    return o["buzzWord"] === obj["buzzWord"];
-  })
-  collection.splice(location, 1);
-  console.log(collection);
-}
-
-function getWords() {
-  var wordsOnly = [];
-  for (var i = 0; i < collection.length; i++) {
-    wordsOnly.push(collection[i]["buzzWord"]);
-  }
-  return wordsOnly;
-}
-
 function putAgain(obj) {
   for (var i = 0; i < collection.length; i++) {
     if (collection[i]["buzzWord"].toLowerCase() === obj["buzzWord"].toLowerCase()) {
@@ -52,6 +44,14 @@ function putAgain(obj) {
       }
     }
   }
+}
+
+function deleteWord(obj) {
+  var location = collection.findIndex(function(o) {
+    return o["buzzWord"] === obj["buzzWord"];
+  })
+  collection.splice(location, 1);
+  console.log(collection);
 }
 
 app.get("/", (req, res) => {
