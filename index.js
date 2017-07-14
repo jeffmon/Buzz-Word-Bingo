@@ -25,7 +25,7 @@ function putWord(obj) {
   }
 }
 
-function deleteWord(obj){
+function deleteWord(obj) {
   var location = collection.findIndex(function(o) {
     return o["buzzWord"] === obj["buzzWord"];
   })
@@ -33,12 +33,24 @@ function deleteWord(obj){
   console.log(collection);
 }
 
-function getWords(){
+function getWords() {
   var wordsOnly = [];
-  for(var i = 0; i < collection.length; i++){
+  for (var i = 0; i < collection.length; i++) {
     wordsOnly.push(collection[i]["buzzWord"]);
   }
   return wordsOnly;
+}
+
+function putAgain(obj) {
+  for (var i = 0; i < collection.length; i++) {
+    if (collection[i]["buzzWord"].toLowerCase() === obj["buzzWord"].toLowerCase()) {
+      if (collection[i].hasOwnProperty("heard")) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+  }
 }
 
 app.get("/", (req, res) => {
@@ -71,13 +83,18 @@ app.route("/buzzword")
     var isWordThere = collection.some(function(obj) {
       return obj["buzzWord"].toLowerCase() === req.body["buzzWord"].toLowerCase()
     });
-    if (isWordThere) {
+    if (isWordThere && putAgain(req.body)) {
       putWord(req.body);
+      res.json({
+        "success": true,
+        "newScore": score
+      })
+    } else{
+      res.json({
+        "success": false
+      })
     }
-    res.json({
-      "success": true,
-      "newScore": score
-    })
+
   })
   .delete((req, res) => {
     var isWordThere = collection.some(function(obj) {
@@ -88,7 +105,7 @@ app.route("/buzzword")
       res.json({
         "success": true
       })
-    } else{
+    } else {
       res.json({
         "success": false
       })
