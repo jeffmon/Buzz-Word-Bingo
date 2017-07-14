@@ -34,6 +34,7 @@ function putWord(obj) {
   }
 }
 
+
 function putAgain(obj) {
   for (var i = 0; i < collection.length; i++) {
     if (collection[i].buzzWord.toLowerCase() === obj.buzzWord.toLowerCase()) {
@@ -45,6 +46,8 @@ function putAgain(obj) {
     }
   }
 }
+
+var test = [];
 
 function deleteWord(obj) {
   var location = collection.findIndex(function(o) {
