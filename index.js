@@ -64,7 +64,18 @@ app.route("/buzzword")
     })
   })
   .delete((req, res) => {
-
+    var isWordThere = collection.some(function(obj) {
+      return obj["buzzWord"].toLowerCase() === req.body["buzzWord"].toLowerCase()
+    });
+    if(isWordThere){
+      var location = collection.findIndex(function(obj){return obj["buzzWord"] === req.body["buzzWord"];
+      })
+      collection.splice(location, 1);
+      console.log(collection);
+      res.json({
+        "success": true
+      })
+    }
   })
 
 
