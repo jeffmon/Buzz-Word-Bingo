@@ -17,7 +17,7 @@ function getWords() {
   return wordsOnly;
 }
 
-function receiveWord(obj) {
+function postWord(obj) {
   var number = Number(obj.points);
   obj.points = number;
   obj.heard = false;
@@ -85,7 +85,7 @@ app.route("/buzzword")
         "success": false
       });
     } else {
-      receiveWord(req.body);
+      postWord(req.body);
       res.json({
         "success": true
       });
